@@ -12,6 +12,8 @@ using FlexiChains: FlexiChains, FlexiChain
 using Random: Xoshiro
 using PosteriorDB
 
+get(ENV, "CI", "false") == "true" && Turing.setprogress!(false)
+
 POSTERIORDB_PATH = joinpath(dirname(@__DIR__), "posteriordb", "posterior_database")
 PDB = isdir(POSTERIORDB_PATH) ? PosteriorDB.database(POSTERIORDB_PATH) : PosteriorDB.database()
 MODEL_DIR = joinpath(@__DIR__, "models")
