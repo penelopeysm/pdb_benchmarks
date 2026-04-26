@@ -50,6 +50,7 @@ arma-arma11        4     802.1 ns     2.4 μs       2.5 μs     2.3 μs     8.8 
 earnings-lh        3       1.3 μs     2.1 μs       3.7 μs     8.7 μs    31.8 μs    18.2 μs
 es-esc            10     172.1 ns   761.0 ns     645.8 ns   534.1 ns   838.1 ns     1.0 μs
 es-esn            10     168.8 ns   811.3 ns     632.1 ns   549.4 ns     1.0 μs     1.1 μs
+kidiq-km           3     843.8 ns     1.2 μs       1.8 μs     4.0 μs    11.7 μs     6.9 μs
 rm-rhin           90       7.8 μs    13.6 μs     298.8 μs    14.1 μs    55.9 μs    53.8 μs
 rd-rm             65       1.2 μs     2.6 μs      32.9 μs     2.5 μs     6.0 μs     7.1 μs
 sblrc-blr          6     466.9 ns   857.9 ns       1.9 μs     1.3 μs     3.1 μs     1.9 μs
