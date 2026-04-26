@@ -122,12 +122,10 @@ struct Result
     dim::Int
     turing_primal::Float64
     stan_primal::Float64
-    stan_primal_nopropto::Float64
     turing_fd_grad::Float64
     turing_enzyme_grad::Float64
     turing_mooncake_grad::Float64
     stan_grad::Float64
-    stan_grad_nopropto::Float64
 end
 
 results = Result[]
@@ -155,27 +153,22 @@ for model_name in models
     d = Int(BridgeStan.param_unc_num(sm))
     q = randn(Xoshiro(468), d)
 
-    BridgeStan.log_density(sm, q; propto=true)
-    t_stan_primal = median_time(@be BridgeStan.log_density($sm, $q; propto=true))
     BridgeStan.log_density(sm, q; propto=false)
-    t_stan_primal_np = median_time(@be BridgeStan.log_density($sm, $q; propto=false))
+    t_stan_primal = median_time(@be BridgeStan.log_density($sm, $q; propto=false))
 
     t_stan_grad = NaN
-    t_stan_grad_np = NaN
     if !EVAL_ONLY
-        BridgeStan.log_density_gradient(sm, q; propto=true)
-        t_stan_grad = median_time(@be BridgeStan.log_density_gradient($sm, $q; propto=true))
         BridgeStan.log_density_gradient(sm, q; propto=false)
-        t_stan_grad_np = median_time(@be BridgeStan.log_density_gradient($sm, $q; propto=false))
+        t_stan_grad = median_time(@be BridgeStan.log_density_gradient($sm, $q; propto=false))
     end
 
     push!(results, Result(
         model_name, turing.dim,
-        turing.primal_time, t_stan_primal, t_stan_primal_np,
+        turing.primal_time, t_stan_primal,
         get(turing.grad_times, "FD", NaN),
         get(turing.grad_times, "Ez", NaN),
         get(turing.grad_times, "Mc", NaN),
-        t_stan_grad, t_stan_grad_np,
+        t_stan_grad,
     ))
 end
 
@@ -185,8 +178,8 @@ col = 11
 name_w = max(16, maximum(length(abbreviate(r.name)) for r in results) + 1)
 pre = name_w + 4
 
-eval_cols = ["Turing", "StanProp", "Stan"]
-grad_cols = ["FwdDiff", "Enzyme", "Mooncake", "StanProp", "Stan"]
+eval_cols = ["Turing", "Stan"]
+grad_cols = ["FwdDiff", "Enzyme", "Mooncake", "Stan"]
 eval_w = length(eval_cols) * col
 grad_w = length(grad_cols) * col
 gap = "  "
@@ -217,13 +210,11 @@ for r in results
         lpad(string(r.dim), 4) * gap *
         lpad(fmt_time(r.turing_primal), col) *
         lpad(fmt_time(r.stan_primal), col) *
-        lpad(fmt_time(r.stan_primal_nopropto), col) *
         (EVAL_ONLY ? "" : gap *
             lpad(fmt_time(r.turing_fd_grad), col) *
             lpad(fmt_time(r.turing_enzyme_grad), col) *
             lpad(fmt_time(r.turing_mooncake_grad), col) *
-            lpad(fmt_time(r.stan_grad), col) *
-            lpad(fmt_time(r.stan_grad_nopropto), col))
+            lpad(fmt_time(r.stan_grad), col))
     println(row)
 end
 
