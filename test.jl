@@ -13,7 +13,7 @@ using Random: Xoshiro
 using PosteriorDB
 
 POSTERIORDB_PATH = joinpath(dirname(@__DIR__), "posteriordb", "posterior_database")
-PDB = PosteriorDB.database(POSTERIORDB_PATH)
+PDB = isdir(POSTERIORDB_PATH) ? PosteriorDB.database(POSTERIORDB_PATH) : PosteriorDB.database()
 MODEL_DIR = joinpath(@__DIR__, "models")
 
 args = filter(a -> !startswith(a, "--"), ARGS)
