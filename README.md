@@ -29,7 +29,7 @@ The Stan code and dataset are pulled automatically from PosteriorDB.
 ## Are the models correctly implemented?
 
 ```bash
-julia --project=. test.jl
+julia --project=. --threads=10 test.jl
 ```
 
 will sample from the Turing model with NUTS and check the results against the PosteriorDB reference samples.
@@ -46,10 +46,11 @@ StanProp means Stan with `propto=true`.
                       ---------------------------------  -------------------------------------------------------
 Model            dim       Turing   StanProp       Stan      FwdDiff     Enzyme   Mooncake   StanProp       Stan
 ----------------------------------------------------------------------------------------------------------------
-es-esc            10     179.0 ns   864.0 ns   765.3 ns     607.6 ns   422.3 ns   826.4 ns     1.0 μs     1.0 μs
-es-esn            10     158.6 ns   852.9 ns   789.4 ns     506.6 ns   547.8 ns     1.0 μs   988.9 ns     1.0 μs
-rd-rm             65       1.2 μs     5.1 μs     2.6 μs      37.8 μs     2.5 μs     5.8 μs     7.1 μs     7.1 μs
-sblrc-blr          6     404.9 ns     1.5 μs   857.9 ns       1.7 μs     1.4 μs     3.3 μs     1.9 μs     1.9 μs
-sblri-blr          6     444.5 ns     1.6 μs   894.5 ns       2.0 μs     1.3 μs     3.3 μs     2.0 μs     2.0 μs
+arma-arma11        4     804.4 ns     4.8 μs     2.5 μs       2.7 μs     2.3 μs     8.8 μs     7.7 μs     7.7 μs
+es-esc            10     160.6 ns   867.4 ns   745.8 ns     596.1 ns   544.7 ns   871.3 ns   991.7 ns     1.0 μs
+es-esn            10     165.5 ns   905.0 ns   830.9 ns     639.5 ns   571.9 ns   979.2 ns     1.0 μs     1.1 μs
+rd-rm             65       1.1 μs     5.2 μs     2.6 μs      32.6 μs     2.5 μs     5.8 μs     7.2 μs     7.2 μs
+sblrc-blr          6     428.8 ns     1.5 μs   868.7 ns       1.8 μs     1.6 μs     3.0 μs     1.9 μs     1.9 μs
+sblri-blr          6     438.1 ns     1.5 μs   864.0 ns       1.9 μs     1.4 μs     3.0 μs     1.9 μs     1.9 μs
 ================================================================================================================
 ```
