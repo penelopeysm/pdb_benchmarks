@@ -30,6 +30,8 @@ The Stan code and dataset are pulled automatically from PosteriorDB.
 
 (On my M1 MacBook Pro; YMMV.)
 
+StanProp means Stan with `propto=true`.
+
 ```
 ================================================================================================================
                                     eval                                        gradient
