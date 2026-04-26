@@ -14,6 +14,8 @@
 using Printf, Random, LinearAlgebra
 using Chairmarks: @be
 using Statistics: median
+using Test
+using FlexiChains: FlexiChain
 
 using Turing
 using ADTypes: AutoForwardDiff, AutoEnzyme, AutoMooncake

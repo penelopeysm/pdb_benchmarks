@@ -26,6 +26,14 @@ julia --project=. bench.jl --eval-only                             # skip gradie
 
 The Stan code and dataset are pulled automatically from PosteriorDB.
 
+## Are the models correctly implemented?
+
+```bash
+julia --project=. test.jl
+```
+
+will sample from the Turing model with NUTS and check the results against the PosteriorDB reference samples.
+
 ## Show me the results
 
 (On my M1 MacBook Pro; YMMV.)
