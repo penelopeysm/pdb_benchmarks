@@ -7,7 +7,7 @@
     end
 end
 
-function make_model(data)
+function make_model(::Val{Symbol("eight_schools-eight_schools_noncentered")}, data)
     J = data["J"]
     y = Float64.(data["y"])
     sigma = Float64.(data["sigma"])

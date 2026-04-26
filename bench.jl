@@ -6,6 +6,10 @@
 #   julia --project=. bench.jl                                           # all models
 #   julia --project=. bench.jl eight_schools-eight_schools_centered      # single model
 #   julia --project=. bench.jl --eval-only                               # skip gradients
+#
+# From the REPL:
+#   include("bench.jl")
+#   ARGS = ["sblri-blr"]; include("bench.jl")
 
 using Printf, Random, LinearAlgebra
 using Chairmarks: @be
@@ -24,8 +28,8 @@ using PosteriorDB
 
 # ── PosteriorDB setup ──
 
-const POSTERIORDB_PATH = joinpath(dirname(@__DIR__), "posteriordb", "posterior_database")
-const PDB = PosteriorDB.database(POSTERIORDB_PATH)
+POSTERIORDB_PATH = joinpath(dirname(@__DIR__), "posteriordb", "posterior_database")
+PDB = PosteriorDB.database(POSTERIORDB_PATH)
 
 # ── Helpers ──
 
@@ -47,10 +51,14 @@ end
 median_time(bench) = median(bench).time
 
 function abbreviate(name)
-    join([join(first.(split(part, '_'))) for part in split(name, '-')], "-")
+    function shorten(part)
+        words = split(part, '_')
+        length(words) == 1 ? part : join(first.(words))
+    end
+    join(shorten.(split(name, '-')), "-")
 end
 
-const AD_BACKENDS = [
+AD_BACKENDS = [
     ("FD", AutoForwardDiff()),
     ("Ez", AutoEnzyme(; mode=set_runtime_activity(Reverse))),
     ("Mc", AutoMooncake()),
@@ -89,8 +97,8 @@ end
 
 # ── Discover models ──
 
-const MODEL_DIR = joinpath(@__DIR__, "models")
-const EVAL_ONLY = "--eval-only" in ARGS
+MODEL_DIR = joinpath(@__DIR__, "models")
+EVAL_ONLY = "--eval-only" in ARGS
 args = filter(a -> !startswith(a, "--"), ARGS)
 
 if isempty(args)
@@ -132,7 +140,7 @@ for model_name in models
 
     # ── Turing ──
     include(joinpath(MODEL_DIR, model_name * ".jl"))
-    turing_model = make_model(data)
+    turing_model = make_model(Val(Symbol(model_name)), data)
     turing = bench_turing(turing_model, model_name; eval_only=EVAL_ONLY)
 
     # ── Stan ──
@@ -185,7 +193,6 @@ total_w = pre + length(gap) + eval_w + (EVAL_ONLY ? 0 : length(gap) + grad_w)
 println()
 println("=" ^ total_w)
 
-# Group headers
 eval_label = "eval"
 grad_label = "gradient"
 group = rpad("", pre) * gap *
@@ -197,7 +204,6 @@ uline = rpad("", pre) * gap * "-" ^ eval_w *
     (EVAL_ONLY ? "" : gap * "-" ^ grad_w)
 println(uline)
 
-# Column headers
 header = rpad("Model", name_w) * lpad("dim", 4) * gap *
     join(lpad(h, col) for h in eval_cols) *
     (EVAL_ONLY ? "" : gap * join(lpad(h, col) for h in grad_cols))
