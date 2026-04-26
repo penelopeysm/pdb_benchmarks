@@ -4,10 +4,9 @@ Turing vs Stan logp + gradient benchmarks on PosteriorDB models.
 
 > [!NOTE]
 >
-> The benchmarking code and pretty-printing is mostly done with Claude.
-> 
 > The implementation of the Stan models, as well as the data for the models, are directly taken from [posteriordb itself](https://github.com/stan-dev/posteriordb/) (via [PosteriorDB.jl](https://github.com/sethaxen/PosteriorDB.jl/)).
 > Turing models are hand-written / optimised by me.
+> The benchmarking code and pretty-printing is mostly written by Claude.
 
 ## Running
 
