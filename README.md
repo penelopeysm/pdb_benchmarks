@@ -52,6 +52,7 @@ earnings-lhm       4       2.0 μs     2.4 μs       4.9 μs     7.5 μs    35.0
 es-esc            10     167.4 ns   760.7 ns     562.1 ns   516.8 ns   827.6 ns     1.1 μs
 es-esn            10     168.6 ns   814.8 ns     673.3 ns   558.2 ns   970.4 ns     1.1 μs
 garch-garch11      4       2.7 μs     3.1 μs       5.0 μs     5.4 μs     9.4 μs    11.5 μs
+gpr-gpr           13       1.8 μs     2.9 μs      15.8 μs     6.3 μs    17.9 μs     5.6 μs
 kidiq-km           3       1.4 μs     1.2 μs       2.1 μs     3.9 μs    11.5 μs     6.9 μs
 rm-rhin           90       8.1 μs    13.2 μs     299.4 μs    15.9 μs    55.5 μs    53.0 μs
 rd-rm             65       1.1 μs     2.6 μs      31.9 μs     2.5 μs     5.8 μs     7.1 μs
