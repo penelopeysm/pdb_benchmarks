@@ -109,7 +109,7 @@ else
     models = args
 end
 
-println("Running $(length(models)) models:")
+println("Running $(length(models)) model(s).")
 for m in models
     println("  - $m")
 end
