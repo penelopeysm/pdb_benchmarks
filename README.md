@@ -46,15 +46,16 @@ Note that all Stan benchmarks are run with `propto=false` (using `propto=true` m
                       ----------------------  --------------------------------------------
 Model            dim       Turing       Stan      FwdDiff     Enzyme   Mooncake       Stan
 ------------------------------------------------------------------------------------------
-arma-arma11        4     799.8 ns     2.4 μs       2.8 μs     2.2 μs     8.8 μs     7.6 μs
-earnings-lh        3       1.7 μs     2.1 μs       3.6 μs     8.2 μs    28.2 μs    18.2 μs
-es-esc            10     166.4 ns   767.1 ns     592.9 ns   570.5 ns   832.2 ns     1.0 μs
-es-esn            10     168.6 ns   820.6 ns     670.5 ns   563.7 ns   962.4 ns     1.1 μs
-garch-garch11      4       2.8 μs     3.1 μs       5.1 μs     5.4 μs     9.6 μs    11.6 μs
-kidiq-km           3     923.7 ns     1.2 μs       2.0 μs     3.9 μs    12.3 μs     6.9 μs
-rm-rhin           90       7.0 μs    13.4 μs     299.0 μs    14.5 μs    55.3 μs    52.7 μs
-rd-rm             65       1.1 μs     2.6 μs      32.4 μs     2.5 μs     5.8 μs     7.1 μs
-sblrc-blr          6     457.7 ns   878.7 ns       2.0 μs     1.3 μs     3.3 μs     1.9 μs
-sblri-blr          6     528.0 ns   888.0 ns       2.6 μs     1.3 μs     3.3 μs     1.9 μs
+arma-arma11        4     807.1 ns     2.5 μs       2.9 μs     2.2 μs     8.8 μs     7.6 μs
+earnings-lh        3       1.5 μs     2.1 μs       3.7 μs     8.7 μs    27.9 μs    18.2 μs
+earnings-lhm       4       2.0 μs     2.4 μs       4.9 μs     7.5 μs    35.0 μs    29.8 μs
+es-esc            10     167.4 ns   760.7 ns     562.1 ns   516.8 ns   827.6 ns     1.1 μs
+es-esn            10     168.6 ns   814.8 ns     673.3 ns   558.2 ns   970.4 ns     1.1 μs
+garch-garch11      4       2.7 μs     3.1 μs       5.0 μs     5.4 μs     9.4 μs    11.5 μs
+kidiq-km           3       1.4 μs     1.2 μs       2.1 μs     3.9 μs    11.5 μs     6.9 μs
+rm-rhin           90       8.1 μs    13.2 μs     299.4 μs    15.9 μs    55.5 μs    53.0 μs
+rd-rm             65       1.1 μs     2.6 μs      31.9 μs     2.5 μs     5.8 μs     7.1 μs
+sblrc-blr          6     447.4 ns   881.1 ns       1.9 μs     1.3 μs     3.4 μs     1.9 μs
+sblri-blr          6     529.7 ns   895.8 ns       2.6 μs     1.3 μs     3.0 μs     1.9 μs
 ==========================================================================================
 ```
