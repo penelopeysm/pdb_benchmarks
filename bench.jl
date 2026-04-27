@@ -14,15 +14,12 @@
 using Printf, Random, LinearAlgebra
 using Chairmarks: @be
 using Statistics: median
-using Test
-using FlexiChains: FlexiChain, VarName
-
 using Turing
 using ADTypes: AutoForwardDiff, AutoEnzyme, AutoMooncake
 using Enzyme: Reverse, set_runtime_activity
 import Mooncake
-using DynamicPPL: LogDensityFunction, getlogjoint_internal, LinkAll
-using DynamicPPL.TestUtils.AD: run_ad, NoTest, WithBackend
+import LogDensityProblems
+using DynamicPPL: LogDensityFunction, VarInfo, link!!
 
 using BridgeStan
 using JSON3
@@ -68,25 +65,28 @@ AD_BACKENDS = [
 
 function bench_turing(turing_model, model_name; eval_only=false)
     rng = Xoshiro(468)
+    vi = VarInfo(rng, turing_model)
+    vi = link!!(vi, turing_model)
+    params = vi[:]
 
-    fd_result = run_ad(
-        turing_model, AutoForwardDiff();
-        test=NoTest(), benchmark=true, rng=rng, verbose=false,
-    )
-    params = fd_result.params
-    primal_time = fd_result.primal_time
-    grad_times = Dict("FD" => fd_result.grad_time)
+
+    fd_ldf = LogDensityFunction(turing_model, vi; adtype=AutoForwardDiff())
+
+    LogDensityProblems.logdensity(fd_ldf, params) # warmup
+    primal_time = median_time(@be LogDensityProblems.logdensity($fd_ldf, $params))
+
+    LogDensityProblems.logdensity_and_gradient(fd_ldf, params) # warmup
+    fd_grad_time = median_time(@be LogDensityProblems.logdensity_and_gradient($fd_ldf, $params))
+    grad_times = Dict("FD" => fd_grad_time)
 
     if !eval_only
         for (label, adtype) in AD_BACKENDS
             label == "FD" && continue
             try
-                result = run_ad(
-                    turing_model, adtype;
-                    test=WithBackend(), benchmark=true,
-                    params=params, verbose=false,
-                )
-                grad_times[label] = result.grad_time
+                ad_ldf = LogDensityFunction(turing_model, vi; adtype=adtype)
+                LogDensityProblems.logdensity_and_gradient(ad_ldf, params) # warmup
+                result = median_time(@be LogDensityProblems.logdensity_and_gradient($ad_ldf, $params))
+                grad_times[label] = result
             catch e
                 @warn "$model_name: $label failed — $(typeof(e))"
                 grad_times[label] = Inf

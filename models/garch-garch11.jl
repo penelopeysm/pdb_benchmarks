@@ -21,22 +21,3 @@ function make_model(::Val{Symbol("garch-garch11")}, data)
         Float64(data["sigma1"]),
     )
 end
-
-function test_model(
-    ::Val{Symbol("garch-garch11")},
-    chn::FlexiChain{<:VarName},
-    ref::FlexiChain{String},
-)
-    for (vn, ref_key) in [
-        (@varname(mu), "mu"),
-        (@varname(alpha0), "alpha0"),
-        (@varname(alpha1), "alpha1"),
-        (@varname(beta1), "beta1"),
-    ]
-        turing_mean = mean(vec(chn[vn]))
-        ref_samples = ref[ref_key]
-        ref_mean = mean(ref_samples)
-        ref_std = std(ref_samples)
-        @test abs(turing_mean - ref_mean) < 0.3 * max(ref_std, 1.0)
-    end
-end

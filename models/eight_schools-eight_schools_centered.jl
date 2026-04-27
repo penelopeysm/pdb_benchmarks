@@ -13,21 +13,3 @@ function make_model(::Val{Symbol("eight_schools-eight_schools_centered")}, data)
     sigma = Float64.(data["sigma"])
     return eight_schools_centered(J, y, sigma)
 end
-
-function test_model(
-    ::Val{Symbol("eight_schools-eight_schools_centered")},
-    chn::FlexiChain{<:VarName},
-    ref::FlexiChain{String},
-)
-    for (vn, ref_key) in [
-        (@varname(mu), "mu"),
-        (@varname(tau), "tau"),
-        [(@varname(theta[i]), "theta[$i]") for i in 1:8]...,
-    ]
-        turing_mean = mean(vec(chn[vn]))
-        ref_samples = ref[ref_key]
-        ref_mean = mean(ref_samples)
-        ref_std = std(ref_samples)
-        @test abs(turing_mean - ref_mean) < 0.3 * max(ref_std, 1.0)
-    end
-end

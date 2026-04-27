@@ -1,44 +1,10 @@
-# PosteriorDB Benchmarks
-
-Turing vs Stan logp + gradient benchmarks on PosteriorDB models.
-
-> [!NOTE]
+> [!WARNING
 >
-> The implementation of the Stan models, as well as the data for the models, are directly taken from [posteriordb itself](https://github.com/stan-dev/posteriordb/tree/master/posterior_database/models/stan) (via [PosteriorDB.jl](https://github.com/sethaxen/PosteriorDB.jl/)).
-> Turing models are hand-written / optimised by me.
-> The benchmarking code and pretty-printing is mostly written by Claude.
+> The benchmarks on this branch are run with DynamicPPL v0.35 (corresponding to Turing v0.37).
+> This is far from the latest version!
+> Performance will be **noticeably** worse.
 
-## Running
-
-```bash
-julia --project=. bench.jl                                         # all models
-julia --project=. bench.jl eight_schools-eight_schools_centered    # one model
-julia --project=. bench.jl --eval-only                             # skip gradients
-```
-
-## Adding a model
-
-1. Pick a posterior from PosteriorDB (e.g. `eight_schools-eight_schools_noncentered`).
-2. Create `models/<posterior-name>.jl` with:
-   - A `@model` function defining the Turing model.
-   - A `setup(data)` function that takes the PosteriorDB dataset dict and returns
-     the instantiated Turing model.
-
-The Stan code and dataset are pulled automatically from PosteriorDB.
-
-## Are the models correctly implemented?
-
-```bash
-julia --project=. --threads=10 test.jl
-```
-
-will sample from the Turing model with NUTS and check the results against the PosteriorDB reference samples.
-
-## Show me the results
-
-(On my M1 MacBook Pro; YMMV.)
-
-Note that all Stan benchmarks are run with `propto=false` (using `propto=true` makes no difference for the gradients but makes the primals come out slower in benchmarks).
+## Results on this branch
 
 ```
 ==========================================================================================
@@ -46,17 +12,17 @@ Note that all Stan benchmarks are run with `propto=false` (using `propto=true` m
                       ----------------------  --------------------------------------------
 Model            dim       Turing       Stan      FwdDiff     Enzyme   Mooncake       Stan
 ------------------------------------------------------------------------------------------
-arma-arma11        4     807.1 ns     2.5 μs       2.9 μs     2.2 μs     8.8 μs     7.6 μs
-earnings-lh        3       1.5 μs     2.1 μs       3.7 μs     8.7 μs    27.9 μs    18.2 μs
-earnings-lhm       4       2.0 μs     2.4 μs       4.9 μs     7.5 μs    35.0 μs    29.8 μs
-es-esc            10     167.4 ns   760.7 ns     562.1 ns   516.8 ns   827.6 ns     1.1 μs
-es-esn            10     168.6 ns   814.8 ns     673.3 ns   558.2 ns   970.4 ns     1.1 μs
-garch-garch11      4       2.7 μs     3.1 μs       5.0 μs     5.4 μs     9.4 μs    11.5 μs
-gpr-gpr           13       1.8 μs     2.9 μs      15.8 μs     6.3 μs    17.9 μs     5.6 μs
-kidiq-km           3       1.4 μs     1.2 μs       2.1 μs     3.9 μs    11.5 μs     6.9 μs
-rm-rhin           90       8.1 μs    13.2 μs     299.4 μs    15.9 μs    55.5 μs    53.0 μs
-rd-rm             65       1.1 μs     2.6 μs      31.9 μs     2.5 μs     5.8 μs     7.1 μs
-sblrc-blr          6     447.4 ns   881.1 ns       1.9 μs     1.3 μs     3.4 μs     1.9 μs
-sblri-blr          6     529.7 ns   895.8 ns       2.6 μs     1.3 μs     3.0 μs     1.9 μs
+arma-arma11        4       4.1 μs     2.4 μs       7.3 μs    11.3 μs    18.6 μs     7.6 μs
+earnings-lh        3       2.4 μs     2.1 μs       4.9 μs    11.8 μs    36.3 μs    18.2 μs
+earnings-lhm       4       2.7 μs     2.2 μs       6.0 μs    10.9 μs    39.2 μs    29.9 μs
+es-esc            10     986.1 ns   740.6 ns       1.8 μs     2.1 μs     5.3 μs     1.0 μs
+es-esn            10     967.7 ns   817.1 ns       1.9 μs     2.1 μs     5.5 μs     1.1 μs
+garch-garch11      4       7.2 μs     3.1 μs      10.2 μs    15.8 μs    23.4 μs    11.5 μs
+gpr-gpr           13       2.7 μs     2.3 μs      21.5 μs     9.3 μs    23.4 μs     4.7 μs
+kidiq-km           3       1.8 μs     1.2 μs       3.0 μs     5.9 μs    15.3 μs     6.9 μs
+rm-rhin           90      12.9 μs    13.4 μs     328.5 μs    18.3 μs    83.5 μs    52.8 μs
+rd-rm             65       5.1 μs     2.8 μs      75.2 μs    36.2 μs    26.8 μs     7.2 μs
+sblrc-blr          6       1.1 μs   850.5 ns       3.4 μs     2.7 μs     7.1 μs     1.9 μs
+sblri-blr          6       1.1 μs   859.1 ns       3.7 μs     2.7 μs     7.0 μs     1.9 μs
 ==========================================================================================
 ```
