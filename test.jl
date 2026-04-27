@@ -14,8 +14,7 @@ using PosteriorDB
 
 get(ENV, "CI", "false") == "true" && Turing.setprogress!(false)
 
-POSTERIORDB_PATH = joinpath(dirname(@__DIR__), "posteriordb", "posterior_database")
-PDB = isdir(POSTERIORDB_PATH) ? PosteriorDB.database(POSTERIORDB_PATH) : PosteriorDB.database()
+PDB = PosteriorDB.database()
 MODEL_DIR = joinpath(@__DIR__, "models")
 
 args = filter(a -> !startswith(a, "--"), ARGS)
