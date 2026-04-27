@@ -37,7 +37,7 @@ Both bench.jl and test.jl discover models by scanning the `models/` directory fo
 - The filename must exactly match the PosteriorDB posterior name (with `.jl` extension)
 - `make_model` uses `Val{Symbol(...)}` dispatch so multiple models coexist after inclusion
 - Convert data values to `Float64` where PosteriorDB returns integers (e.g. `Float64.(data["y"])`)
-- PosteriorDB path is resolved relative to the parent directory: `joinpath(dirname(@__DIR__), "posteriordb", "posterior_database")`
+- Use `PosteriorDB.database()` to get the PosteriorDB database (uses the Julia package's built-in path, not a local checkout)
 
 ## Adding a Model
 
